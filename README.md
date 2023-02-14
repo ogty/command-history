@@ -1,6 +1,10 @@
 <h1 align="center">🚧 Command History 🚧</h1>
 
 ```zsh
+$ npm install --global command-history-cli
+```
+
+```zsh
 $ ch <command> [option]
 ```
 
