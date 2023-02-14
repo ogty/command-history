@@ -1,4 +1,4 @@
-<h1 align="center">Command History</h1>
+<h1 align="center">🚧 Command History 🚧</h1>
 
 ```zsh
 $ ch <command> [option]
