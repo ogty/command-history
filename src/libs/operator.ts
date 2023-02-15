@@ -35,7 +35,6 @@ export class CommandOperator implements Commands {
   #dataPath: string;
   #commandHistoryOperator: CommandHistoryOperator;
   historyLinePattern = /: (?<timestamp>[0-9]+):[0-9]+;(?<command>.*)/;
-  // startPattern = /^\s*\.\/bin\/ch\.js\s+start/;
   startPattern = /^\s*ch\s+start/;
 
   constructor() {
@@ -94,7 +93,7 @@ export class CommandOperator implements Commands {
     const { sectionName, sectionGroup } = data.currentData;
     data.sections[sectionName] = {
       group: sectionGroup,
-      history: history.slice(1),
+      history: history.slice(1).reverse(),
       templates: {},
     };
     data.currentData = {
