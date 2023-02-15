@@ -26,6 +26,16 @@ $ ch <command> [option]
 | `--group` | `-g`  | string  |
 | `--print` | `p`   | boolean |
 
+## Examples
+
+### Template Output
+
+Select a template and output commands combined with `&&`.
+
+```zsh
+$ ch template -p
+```
+
 ### Create templates from execution history
 
 ```zsh
