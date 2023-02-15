@@ -35,6 +35,7 @@ export class CommandOperator implements Commands {
   #dataPath: string;
   #commandHistoryOperator: CommandHistoryOperator;
   historyLinePattern = /: (?<timestamp>[0-9]+):[0-9]+;(?<command>.*)/;
+  // startPattern = /^\s*\.\/bin\/ch\.js\s+start/;
   startPattern = /^\s*ch\s+start/;
 
   constructor() {
@@ -184,6 +185,24 @@ export class CommandOperator implements Commands {
     const message =
       sectionName + groupString ? sectionName + groupString : "none";
     console.log(message);
+  }
+
+  async history() {
+    const data = JSON.parse(readFileSync(this.#dataPath, encoding));
+    const sectionNames = Object.keys(data.sections);
+
+    const sectionName = await prompt({
+      type: "select",
+      name: "name",
+      message: "Select sections",
+      choices: sectionNames,
+    }).then((answer) => {
+      const { name } = answer as { name: string };
+      return name;
+    });
+
+    const { history } = data.sections[sectionName];
+    console.log(history.join("\n"));
   }
 
   list(): void {

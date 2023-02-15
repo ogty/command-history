@@ -43,6 +43,7 @@ match(command as CommandNames)
     }
     commandOperator.template();
   })
+  .with("history", () => commandOperator.history())
   .with("current", () => commandOperator.current())
   .with("list", () => commandOperator.list())
   .exhaustive();

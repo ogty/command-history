@@ -16,6 +16,7 @@ $ ch <command> [option]
 | `finish`   |             |                   |
 | `template` |             | `-p`              |
 | `list`     |             |                   |
+| `history`  |             |                   |
 | `current`  |             |                   |
 
 ## Options

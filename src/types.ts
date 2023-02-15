@@ -19,6 +19,7 @@ export interface Commands {
   start: (name: string, group: string) => void;
   finish: () => void;
   current: () => void;
+  history: () => void;
   template: () => void;
 }
 
