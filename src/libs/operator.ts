@@ -50,7 +50,7 @@ export class CommandOperator implements Commands {
       sections: {},
       currentData: {
         sectionName: "",
-        sectionCategory: "",
+        sectionGroup: "",
       },
     };
     writeFileSync(this.#dataPath, JSON.stringify(data), encoding);
@@ -60,11 +60,11 @@ export class CommandOperator implements Commands {
     writeFileSync(this.#dataPath, JSON.stringify(data, null, 4), encoding);
   }
 
-  start(name: string, category: string): void {
+  start(name: string, group: string): void {
     const data = JSON.parse(readFileSync(this.#dataPath, encoding));
     data.currentData = {
       sectionName: name,
-      sectionCategory: category,
+      sectionGroup: group,
     };
     this.update(data);
   }
@@ -90,15 +90,15 @@ export class CommandOperator implements Commands {
     });
 
     const data = JSON.parse(readFileSync(this.#dataPath, encoding));
-    const { sectionName, sectionCategory } = data.currentData;
+    const { sectionName, sectionGroup } = data.currentData;
     data.sections[sectionName] = {
+      group: sectionGroup,
       history: history.slice(1),
-      category: sectionCategory,
-      templates: [],
+      templates: {},
     };
     data.currentData = {
       sectionName: "",
-      sectionCategory: "",
+      sectionGroup: "",
     };
     this.update(data);
   }
@@ -142,17 +142,61 @@ export class CommandOperator implements Commands {
       return name;
     });
 
-    data.sections[sectionName].templates.push({
-      [templateName]: selectedLines,
-    });
+    data.sections[sectionName].templates[templateName] = selectedLines;
     this.update(data);
+  }
+
+  async getTemplate() {
+    const data = JSON.parse(readFileSync(this.#dataPath, encoding));
+    const sectionNames = Object.keys(data.sections).filter(
+      (sectionName) => Object.keys(data.sections[sectionName].templates).length
+    );
+
+    const sectionName = await prompt({
+      type: "select",
+      name: "name",
+      message: "Select sections",
+      choices: sectionNames,
+    }).then((answer) => {
+      const { name } = answer as { name: string };
+      return name;
+    });
+
+    const templateNames = Object.keys(data.sections[sectionName].templates);
+    const templateName = await prompt({
+      type: "select",
+      name: "name",
+      message: "Select templates",
+      choices: templateNames,
+    }).then((answer) => {
+      const { name } = answer as { name: string };
+      return name;
+    });
+
+    const selectedLines = data.sections[sectionName].templates[templateName];
+    console.log(selectedLines.join(" && "));
+  }
+
+  current(): void {
+    const data = JSON.parse(readFileSync(this.#dataPath, encoding));
+    const { sectionName, sectionGroup } = data.currentData;
+    const groupString = sectionGroup ? `(${sectionGroup})` : "";
+    const message =
+      sectionName + groupString ? sectionName + groupString : "none";
+    console.log(message);
   }
 
   list(): void {
     const data = JSON.parse(readFileSync(this.#dataPath, encoding));
     const sectionNames = Object.keys(data.sections);
     sectionNames.map((sectionName) => {
-      console.log(`- ${sectionName}`);
+      const templateNames = Object.keys(data.sections[sectionName].templates);
+      const group = data.sections[sectionName].group;
+      const groupString = group ? `(${group})` : "";
+      console.log(`- ${sectionName}${groupString}`);
+      templateNames.map((templateName) => {
+        console.log(`  - ${templateName}`);
+      });
     });
   }
 }

@@ -5,7 +5,7 @@ import type { CommandNames } from "./types";
 
 const args = yargs(process.argv.slice(2))
   .usage("Usage: $0 <command> [options]")
-  .command("* <command> [name] [group]", "")
+  .command("* <command> [name] [group] [print]", "")
   .options({
     name: {
       type: "string",
@@ -21,14 +21,28 @@ const args = yargs(process.argv.slice(2))
       default: "",
       alias: "g",
     },
+    print: {
+      type: "boolean",
+      describe: "",
+      demandOption: true,
+      default: false,
+      alias: "p",
+    },
   })
   .parseSync();
 
-const { command, name, group } = args;
+const { command, name, group, print } = args;
 const commandOperator = new CommandOperator();
 match(command as CommandNames)
   .with("start", () => commandOperator.start(name, group))
   .with("finish", () => commandOperator.finish())
-  .with("template", () => commandOperator.template())
+  .with("template", () => {
+    if (print) {
+      commandOperator.getTemplate();
+      return;
+    }
+    commandOperator.template();
+  })
+  .with("current", () => commandOperator.current())
   .with("list", () => commandOperator.list())
   .exhaustive();

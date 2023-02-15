@@ -1,14 +1,13 @@
 export type Shell = "zsh" | "bash";
 
-type Template = { [name: string]: string[] };
 type SectionData = {
+  group: string;
   history: string[];
-  category: string;
-  templates: Template[];
+  templates: { [name: string]: string[] };
 };
 type CurrentData = {
   sectionName: string;
-  sectionCategory: string;
+  sectionGroup: string;
 };
 export type CommandHistory = {
   sections: { [name: string]: SectionData };
@@ -17,8 +16,9 @@ export type CommandHistory = {
 
 export interface Commands {
   list: () => void;
-  start: (name: string, category: string) => void;
+  start: (name: string, group: string) => void;
   finish: () => void;
+  current: () => void;
   template: () => void;
 }
 

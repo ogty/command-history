@@ -10,22 +10,21 @@ $ ch <command> [option]
 
 ## Commands
 
-- `start`
-- `finish`
-- `template`
-- `list`
+| Name       | Description | Available options |
+| ---------- | ----------- | ----------------- |
+| `start`    |             | `-n`, `-g`        |
+| `finish`   |             |                   |
+| `template` |             | `-p`              |
+| `list`     |             |                   |
+| `current`  |             |                   |
 
-```zsh
-$ ch start --name <name>
-$ # ...
-$ ch finish
-```
+## Options
 
-**`.zshrc`**
-
-```sh
-trap ch finish
-```
+| Long      | Short | Type    |
+| --------- | ----- | ------- |
+| `--name`  | `-n`  | string  |
+| `--group` | `-g`  | string  |
+| `--print` | `p`   | boolean |
 
 ### Create templates from execution history
 
